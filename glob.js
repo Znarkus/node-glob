@@ -72,6 +72,15 @@ function glob (pattern, options, cb) {
     return globSync(pattern, options)
   }
 
+  if (!cb && global.Promise) {
+    return new Promise(function (resolve, reject) {
+      return new Glob(pattern, options, function (err, files) {
+        if (err) return reject(err)
+        resolve(files)
+      })
+    })
+  }
+
   return new Glob(pattern, options, cb)
 }
 
